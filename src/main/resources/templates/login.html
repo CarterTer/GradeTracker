@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
     <head>
-        <title>Spring Security Example </title>
+        <title>Login </title>
     </head>
     <body>
         <div th:if="${param.error}">
@@ -15,5 +15,6 @@
             <div><label> Password: <input type="password" name="password"/> </label></div>
             <div><input type="submit" value="Sign In"/></div>
         </form>
+        <p>Go to <a href="/home">home</a>, or to <a href="register">register</a></p>
     </body>
 </html>
