@@ -1,13 +1,15 @@
 <!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <html>
     <head>
-        <title>Getting Started: Serving Web Content</title>
+        <title>Homepage</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     </head>
     <body>
         <form th:action="@{/logout}" method="post">
             <input type="submit" value="Sign Out"/>
         </form>
+        Hello, <span th:text="${username}"></span>!
         <p>Go to <a href="/login">login</a></p>
     </body>
 </html>
