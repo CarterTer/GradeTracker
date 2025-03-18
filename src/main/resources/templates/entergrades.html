@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Enter Grades</title>
+</head>
+<body>
+    <h2>Enter Grades</h2>
+    <form th:action="@{/grades/enter}" method="post">
+        <label>Course ID:</label>
+        <input type="text" name="courseId"/><br/><br/>
+        
+        <label>Student ID:</label>
+        <input type="text" name="studentId"/><br/><br/>
+        
+        <label>Score:</label>
+        <input type="number" name="score"/><br/><br/>
+        
+        <label>Feedback:</label>
+        <textarea name="feedback"></textarea><br/><br/>
+        
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
