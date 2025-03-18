@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -38,7 +39,7 @@ public class GTUserDetailsService implements UserDetailsService {
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
-
+    
         UserRecord record;
         try {
             record = auth.createUser(
@@ -50,46 +51,52 @@ public class GTUserDetailsService implements UserDetailsService {
             e.printStackTrace();
             return false;
         }
-
+    
         User repr = new User();
-        repr.role = role;
+        repr.role = role.startsWith("ROLE_") ? role : "ROLE_" + role.toUpperCase();
         repr.uid = record.getUid();
         repr.username = user.getUsername();
         repr.password = user.getPassword();
         db.collection("users").document(record.getUid()).set(repr);
-
+    
         return true;
     }
+    
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Query query = db.collection("users").whereEqualTo("username", username);
+public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    Query query = db.collection("users").whereEqualTo("username", username);
 
-        QuerySnapshot evaluated;
-        try {
-            evaluated = query.get().get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
-
-        int size = evaluated.size();
-        if(size <= 0) {
-            throw new UsernameNotFoundException("No such username");
-        } else if(size > 1) {
-            throw new IllegalStateException("Duplicate username");
-        }
-
-        User u = evaluated.iterator().next().toObject(User.class);
-        String id = u.uid;
-
-        UserRecord record;
-        try {
-            record = auth.getUser(id);
-        } catch (FirebaseAuthException e) {
-            throw new RuntimeException(e);
-        }
-
-        // fixme: pass the correct authorities
-        return new GTUser(username, u.password, record.getEmail(), List.of());
+    QuerySnapshot evaluated;
+    try {
+        evaluated = query.get().get();
+    } catch (InterruptedException | ExecutionException e) {
+        throw new RuntimeException(e);
     }
+
+    int size = evaluated.size();
+    if(size <= 0) {
+        throw new UsernameNotFoundException("No such username");
+    } else if(size > 1) {
+        throw new IllegalStateException("Duplicate username");
+    }
+
+    User u = evaluated.iterator().next().toObject(User.class);
+    String id = u.uid;
+
+    UserRecord record;
+    try {
+        record = auth.getUser(id);
+    } catch (FirebaseAuthException e) {
+        throw new RuntimeException(e);
+    }
+
+    String role = u.role;
+    if (role == null) {
+        role = "ROLE_STUDENT";
+    }
+
+    return new GTUser(username, u.password, record.getEmail(), List.of(new SimpleGrantedAuthority(role)));
+}
+
 }

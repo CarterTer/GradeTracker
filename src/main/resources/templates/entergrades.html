@@ -1,24 +1,44 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.thymeleaf.org">
 <head>
     <title>Enter Grades</title>
 </head>
 <body>
     <h2>Enter Grades</h2>
-    <form th:action="@{/grades/enter}" method="post">
-        <label>Course ID:</label>
-        <input type="text" name="courseId"/><br/><br/>
-        
-        <label>Student ID:</label>
-        <input type="text" name="studentId"/><br/><br/>
-        
-        <label>Score:</label>
-        <input type="number" name="score"/><br/><br/>
-        
-        <label>Feedback:</label>
-        <textarea name="feedback"></textarea><br/><br/>
-        
-        <button type="submit">Submit</button>
-    </form>
+
+    <!-- 仅教师可见 -->
+    <div th:if="${#authorization.expression('hasAuthority(''ROLE_TEACHER'')')}">
+        <form th:action="@{/grades/enter}" method="post">
+            <label>Course ID:</label>
+            <input type="text" name="courseId" required/><br/><br/>
+            
+            <label>Student ID:</label>
+            <input type="text" name="studentId" required/><br/><br/>
+            
+            <label>Score:</label>
+            <input type="number" name="score" required/><br/><br/>
+            
+            <label>Feedback:</label>
+            <textarea name="feedback"></textarea><br/><br/>
+            
+            <button type="submit">Submit Grade</button>
+        </form>
+
+        <h2>Existing Courses</h2>
+        <ul>
+            <li th:each="course : ${courses}" th:text="${course}"></li>
+        </ul>
+
+        <h2>Existing Students</h2>
+        <ul>
+            <li th:each="student : ${students}" th:text="${student}"></li>
+        </ul>
+    </div>
+
+    <!-- 非教师用户（学生或未登录） -->
+    <div th:unless="${#authorization.expression('hasAuthority(''ROLE_TEACHER'')')}">
+        <p><b>You do not have permission to enter grades.</b></p>
+    </div>
+
 </body>
 </html>
