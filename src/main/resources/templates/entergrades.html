@@ -6,7 +6,6 @@
 <body>
     <h2>Enter Grades</h2>
 
-    <!-- 仅教师可见 -->
     <div th:if="${#authorization.expression('hasAuthority(''ROLE_TEACHER'')')}">
         <form th:action="@{/grades/enter}" method="post">
             <label>Course ID:</label>
@@ -35,7 +34,6 @@
         </ul>
     </div>
 
-    <!-- 非教师用户（学生或未登录） -->
     <div th:unless="${#authorization.expression('hasAuthority(''ROLE_TEACHER'')')}">
         <p><b>You do not have permission to enter grades.</b></p>
     </div>
