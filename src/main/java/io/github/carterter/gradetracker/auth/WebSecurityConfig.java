@@ -27,6 +27,7 @@ import java.util.List;
 public class WebSecurityConfig {
     @Autowired
     private GTUserDetailsService userDetailsService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -47,6 +48,11 @@ public class WebSecurityConfig {
     }
     
 
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

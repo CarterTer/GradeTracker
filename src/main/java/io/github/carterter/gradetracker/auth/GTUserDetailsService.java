@@ -12,7 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -39,7 +41,7 @@ public class GTUserDetailsService implements UserDetailsService {
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
-    
+
         UserRecord record;
         try {
             record = auth.createUser(
@@ -51,13 +53,16 @@ public class GTUserDetailsService implements UserDetailsService {
             e.printStackTrace();
             return false;
         }
+
     
         User repr = new User();
         repr.role = role.startsWith("ROLE_") ? role : "ROLE_" + role.toUpperCase();
+
         repr.uid = record.getUid();
         repr.username = user.getUsername();
         repr.password = user.getPassword();
         db.collection("users").document(record.getUid()).set(repr);
+
     
         return true;
     }
@@ -98,5 +103,6 @@ public UserDetails loadUserByUsername(String username) throws UsernameNotFoundEx
 
     return new GTUser(username, u.password, record.getEmail(), List.of(new SimpleGrantedAuthority(role)));
 }
+
 
 }
