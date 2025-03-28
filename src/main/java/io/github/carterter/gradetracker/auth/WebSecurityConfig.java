@@ -34,15 +34,24 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/home").permitAll()
                         .requestMatchers("/register").permitAll()
+                        .requestMatchers("/grades/**").hasAuthority("ROLE_TEACHER")  // 仅教师可访问录入成绩
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
+                        .defaultSuccessUrl("/home", true)  // 登录后跳转到 /home
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll());
-
+    
         return http.build();
+    }
+    
+
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
