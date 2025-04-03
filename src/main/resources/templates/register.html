@@ -1,29 +1,30 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-
-<head>
-    <title>Register</title>
-</head>
-<body>
-    <div th:if="${param.error}">
-        Invalid information.
-    </div>
-    <form th:action="@{/register}" method="post">
-        <div><label> Username: <input type="text" name="username" required/> </label></div>
-        <div><label> Email: <input type="email" name="email" required/> </label></div>
-        <div><label> Password: <input type="password" name="password" required/> </label></div>
-        <div>
-            <label>
-                Role:
-                <select name="role">
-                    <option value="ROLE_TEACHER">Teacher</option>
-                    <option value="ROLE_STUDENT">Student</option>
-                </select>
-            </label>
-        </div>
-        <div><input type="submit" value="Register"/></div>
-        <p>Go to <a href="/home">home</a>, or to <a href="/login">login</a></p>
-    </form>
-</body>
+    <head>
+        <title>Register</title>
+        <link th:href="@{/css/main.css}" rel="stylesheet" />
+        <link th:href="@{/css/center.css}" rel="stylesheet" />
+    </head>
+    <body class="parent">
+        <form th:action="@{/register}" method="post" class="view">
+            <a class="go-backward" href="/login">←login</a>
+            <div th:if="${param.error}">
+                Invalid information.
+            </div>
+            <div><label> Username: <input type="text" name="username" required/> </label></div>
+            <div><label> Email: <input type="email" name="email" required/> </label></div>
+            <div><label> Password: <input type="password" name="password" required/> </label></div>
+            <div>
+                <label>
+                    Role:
+                    <select name="role">
+                        <option value="ROLE_TEACHER">Teacher</option>
+                        <option value="ROLE_STUDENT">Student</option>
+                    </select>
+                </label>
+            </div>
+            <div><input class="button" type="submit" value="Register"/></div>
+        </form>
+    </body>
 </html>
 

@@ -1,30 +1,27 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-
-<head>
+    <head>
     <title>Homepage</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-</head>
-<body>
-    <h2>Welcome, <span th:text="${#authentication.name}"></span>!</h2>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link th:href="@{/css/main.css}" rel="stylesheet" />
+        <link th:href="@{/css/center.css}" rel="stylesheet" />
+    </head>
+    <body class="parent">
+        <div class="view">
+            <h2>Welcome, <span th:text="${#authentication.name}"></span>!</h2>
 
-    <div th:if="${#authorization.expression('hasAuthority(''ROLE_TEACHER'')')}">
-        <h3>Teacher Panel</h3>
-        <p>You can enter grades for students.</p>
-        <a href="/grades/enter"><button>Enter Grades</button></a>
-    </div>
+            <div th:if="${#authorization.expression('hasAuthority(''ROLE_TEACHER'')')}">
+                <a href="/grades/enter"><button class="button">Enter Grades</button></a>
+            </div>
 
-    <div th:if="${#authorization.expression('hasAuthority(''ROLE_STUDENT'')')}">
-        <h3>Student Panel</h3>
-        <p>You can view your grades.</p>
-        <a href="/grades/view"><button>View My Grades</button></a>
-    </div>
+            <div th:if="${#authorization.expression('hasAuthority(''ROLE_STUDENT'')')}">
+                <a href="/grades/view"><button class="button">View My Grades</button></a>
+            </div>
 
-    <p>Go to <a href="/login">login</a></p>
-
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Sign Out"/>
-    </form>
-</body>
+            <form th:action="@{/logout}" method="post">
+                <input class="button" type="submit" value="Sign Out"/>
+            </form>
+        </div>
+    </body>
 </html>
 

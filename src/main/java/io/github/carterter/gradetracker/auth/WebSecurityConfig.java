@@ -1,5 +1,6 @@
 package io.github.carterter.gradetracker.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -32,9 +32,11 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/home").permitAll()
+//                        .requestMatchers("/", "/home").permitAll()
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/grades/**").hasAuthority("ROLE_TEACHER")  // 仅教师可访问录入成绩
+                        .requestMatchers("/css/**").permitAll()
+                        .requestMatchers("/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -47,13 +49,6 @@ public class WebSecurityConfig {
         return http.build();
     }
     
-
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -65,7 +60,7 @@ public class WebSecurityConfig {
     }
 
     @PostMapping("register")
-    public View doRegister(@RequestParam String email, @RequestParam String username, @RequestParam String password, @RequestParam String role) {
+    public ModelAndView doRegister(@RequestParam String email, @RequestParam String username, @RequestParam String password, @RequestParam String role, HttpServletRequest request) {
         // important note: this does password encryption backend-side.
         // it would be better to use the firebase client sdk.
 
@@ -79,15 +74,12 @@ public class WebSecurityConfig {
                 role
         );
 
-        RedirectView target = new RedirectView();
-
-        // fixme: this should really be better (show an error message, ...).
         if(!result) {
-            target.setUrl("/register");
+            request.setAttribute("error", 1);
+            return new ModelAndView("/register");
         } else {
-            target.setUrl("/login");
+            request.setAttribute("signupsuccess", 1);
+            return new ModelAndView("forward:/login");
         }
-
-        return target;
     }
 }

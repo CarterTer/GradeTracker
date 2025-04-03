@@ -1,42 +1,55 @@
 <!DOCTYPE html>
-<html xmlns="http://www.thymeleaf.org">
-<head>
-    <title>Enter Grades</title>
-</head>
-<body>
-    <h2>Enter Grades</h2>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <title>Enter Grades</title>
+        <link th:href="@{/css/main.css}" rel="stylesheet" />
+        <link th:href="@{/css/entergrades.css}" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="parent" th:if="${#authorization.expression('hasAuthority(''ROLE_TEACHER'')')}">
+            <form th:action="@{/grades/enter}" method="post" class="view">
+                <h2>Enter Grades</h2>
 
-    <div th:if="${#authorization.expression('hasAuthority(''ROLE_TEACHER'')')}">
-        <form th:action="@{/grades/enter}" method="post">
-            <label>Course ID:</label>
-            <input type="text" name="courseId" required/><br/><br/>
-            
-            <label>Student ID:</label>
-            <input type="text" name="studentId" required/><br/><br/>
-            
-            <label>Score:</label>
-            <input type="number" name="score" required/><br/><br/>
-            
-            <label>Feedback:</label>
-            <textarea name="feedback"></textarea><br/><br/>
-            
-            <button type="submit">Submit Grade</button>
-        </form>
+                <div>
+                    <label for="courseId">Course ID:</label><br/>
+                    <input type="text" id="courseId" name="courseId" required/>
+                </div>
 
-        <h2>Existing Courses</h2>
-        <ul>
-            <li th:each="course : ${courses}" th:text="${course}"></li>
-        </ul>
+                <div>
+                    <label for="studentId">Student ID:</label><br/>
+                    <input type="text" id="studentId" name="studentId" required/>
+                </div>
 
-        <h2>Existing Students</h2>
-        <ul>
-            <li th:each="student : ${students}" th:text="${student}"></li>
-        </ul>
-    </div>
+                <div>
+                    <label for="score">Score:</label><br/>
+                    <input type="number" id="score" name="score" required/>
+                </div>
 
-    <div th:unless="${#authorization.expression('hasAuthority(''ROLE_TEACHER'')')}">
-        <p><b>You do not have permission to enter grades.</b></p>
-    </div>
+                <div>
+                    <label for="feedback">Feedback:</label><br/>
+                    <textarea id="feedback" name="feedback"></textarea>
+                </div>
 
-</body>
+                <input class="button" type="submit" value="Submit Grade">
+            </form>
+
+            <div class="view">
+                <h2>Existing Courses</h2>
+                <ul>
+                    <li th:each="course : ${courses}" th:text="${course}"></li>
+                </ul>
+            </div>
+
+            <div class="view">
+                <h2>Existing Students</h2>
+                <ul>
+                    <li th:each="student : ${students}" th:text="${student}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <div th:unless="${#authorization.expression('hasAuthority(''ROLE_TEACHER'')')}">
+            <p><b>You do not have permission to enter grades.</b></p>
+        </div>
+    </body>
 </html>
