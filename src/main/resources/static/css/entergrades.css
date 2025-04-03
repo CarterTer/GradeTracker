@@ -1,0 +1,21 @@
+.parent {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 100%;
+    gap: 10px;
+}
+
+h2 {
+    text-align: center;
+}
+
+.view {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 100%;
+    align-items: center;
+}
+
+textarea {
+    resize: vertical;
+}

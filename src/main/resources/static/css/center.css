@@ -1,0 +1,31 @@
+.parent {
+    display: grid;
+    grid-template-columns: 1fr max-content 1fr;
+    grid-template-rows: 1fr max-content 1fr;
+}
+
+.view {
+    grid-column-start: 2;
+    grid-column-end: span 1;
+    grid-row-start: 2;
+    grid-row-end: span 1;
+    width: auto;
+    height: auto;
+    display: grid;
+    grid-template-columns: 100%;
+    justify-items: center;
+}
+
+.go-forward {
+    text-align: right;
+    width: 100%;
+    font-size: 10pt;
+    color: blue;
+}
+
+.go-backward {
+    text-align: left;
+    width: 100%;
+    font-size: 10pt;
+    color: blue;
+}
