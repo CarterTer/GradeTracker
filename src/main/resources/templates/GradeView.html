@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html>
+    <head>
+        <title>Current Grades</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <!-- Fixme: should display all related info to a current courses' grades, need a way to access those courses through the user -->
+        Course Name: <h2 th:text="${courseName}"></h2>
+        Instructor: <h3 th:text="${instructor}"></h3>
+        <!-- displays all assignments, and their individual grades to the user as a table -->
+        <table>
+            <tr th:each="assignment: ${assignmentGrades}">
+                <td th:text="${assignment.name}"></td>
+                <td th:text="${assignment.gradeReceived}" th:text="${assignment.pointValue}">/</td>
+            </tr>
+        </table>
+        <!-- add other pages -->
+        <p>Go to <a href="/home">home</a></p>
+    </body>
+</html>
