@@ -97,7 +97,7 @@ public class EnterGradesController {
     
         model.addAttribute("courseId", courseId);
         model.addAttribute("students", students);
-        model.addAttribute("studentGrades", studentGrades); // ✅ 这一行确保放进 model！
+        model.addAttribute("studentGrades", studentGrades);
     
         return "coursestudents";
     }
