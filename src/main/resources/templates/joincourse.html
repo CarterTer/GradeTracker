@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Join Course</title>
+    <link th:href="@{/css/main.css}" rel="stylesheet" />
+</head>
+<body>
+<div class="view" th:if="${#authorization.expression('hasAuthority(''ROLE_STUDENT'')')}">
+    <h2>Available Courses</h2>
+    <ul>
+        <li th:each="course : ${courses}">
+            <form th:action="@{/courses/join}" method="post">
+                <span th:text="${course.id} + ' - ' + ${course.data.title}"></span>
+                <input type="hidden" name="courseId" th:value="${course.id}" />
+                <button type="submit">Join</button>
+            </form>
+        </li>
+    </ul>
+</div>
+<div th:unless="${#authorization.expression('hasAuthority(''ROLE_STUDENT'')')}">
+    <p>You do not have permission to join a course.</p>
+</div>
+</body>
+</html>
