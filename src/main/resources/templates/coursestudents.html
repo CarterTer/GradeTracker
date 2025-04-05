@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Students in Course</title>
+    <style>
+        form {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        button {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<h2 th:text="'Students in ' + ${courseId}"></h2>
+
+<!-- <pre th:text="${studentGrades}"></pre> -->
+<div th:each="entry : ${studentGrades.entrySet()}">
+    <strong th:text="${entry.key}"></strong><br/>
+
+    <div th:if="${entry.value != null}">
+        <p>Current Score: <span th:text="${entry.value.score}">N/A</span></p>
+        <p>Feedback: <span th:text="${entry.value.feedback}">N/A</span></p>
+    </div>
+    <div th:unless="${entry.value != null}">
+        <p>No grade yet.</p>
+    </div>
+
+    <form th:action="@{/grades/submit}" method="post">
+        <input type="hidden" name="courseId" th:value="${courseId}" />
+        <input type="hidden" name="studentId" th:value="${entry.key}" />
+
+        <label>New Score:</label>
+        <input type="number" name="score" required /><br/>
+
+        <label>New Feedback:</label>
+        <textarea name="feedback"></textarea><br/>
+
+        <button type="submit">Submit / Update Grade</button>
+    </form>
+</div>
+
+
+<a href="/grades/enter">← Back to Grade Entry</a>
+</body>
+</html>
