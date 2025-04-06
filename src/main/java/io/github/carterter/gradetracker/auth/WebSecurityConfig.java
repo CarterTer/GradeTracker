@@ -31,17 +31,17 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests((requests) -> requests
-//                        .requestMatchers("/", "/home").permitAll()
-                        .requestMatchers("/register").permitAll()
-                        .requestMatchers("/grades/**").hasAuthority("ROLE_TEACHER")  // 仅教师可访问录入成绩
-                        .requestMatchers("/css/**").permitAll()
-                        .requestMatchers("/js/**").permitAll()
-                        .anyRequest().authenticated()
-                )
+        .authorizeHttpRequests((requests) -> requests
+            .requestMatchers("/register").permitAll()
+            .requestMatchers("/css/**", "/js/**").permitAll()
+            .requestMatchers("/grades/**").hasAuthority("ROLE_TEACHER")  
+            .requestMatchers("/student/**").hasAuthority("ROLE_STUDENT") 
+            .anyRequest().authenticated()
+        )
+    
                 .formLogin((form) -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/home", true)  // 登录后跳转到 /home
+                        .defaultSuccessUrl("/home", true) 
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll());

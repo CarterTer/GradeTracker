@@ -13,12 +13,17 @@
             <div th:if="${#authorization.expression('hasAuthority(''ROLE_TEACHER'')')}">
                 <a href="/grades/enter"><button class="button">Enter Grades</button></a>
                 <a href="/courses/create"><button class="button">Create Course</button></a>
+                <a href="/teacher/assignments/new"><button>Create Assignment</button></a>
+
             </div>
             
 
             <div th:if="${#authorization.expression('hasAuthority(''ROLE_STUDENT'')')}">
                 <a href="/courses/join"><button class="button">Join Course</button></a>
-                <a href="/grades/view"><button class="button">View My Grades</button></a>
+                <form th:action="@{/student/viewmygrades}" method="get">
+                    <button type="submit" class="button">View My Grades</button>
+                </form>
+                
             </div>
             
 

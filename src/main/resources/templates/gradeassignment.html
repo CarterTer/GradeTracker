@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Grade Assignment</title>
+</head>
+<body>
+
+    <h2 th:if="${assignment != null}">
+        Grading Assignment for [[${courseId}]]: [[${assignment.title}]]
+    </h2>
+    <h2 th:unless="${assignment != null}">
+        Grading Assignment for [[${courseId}]]
+    </h2>
+    
+    <div th:each="studentId : ${students}">
+        <h3 th:text="${studentId}"></h3>
+
+        <div th:if="${grades != null and grades[studentId] != null}">
+            <p>Score: <span th:text="${grades[studentId]['score']}"></span></p>
+            <p>Feedback: <span th:text="${grades[studentId]['feedback']}"></span></p>
+        </div>
+
+        <div th:if="${grades == null or grades[studentId] == null}">
+            <p>No grade yet.</p>
+        </div>
+
+        <form th:action="@{'/courses/' + ${courseId} + '/assignments/' + ${assignmentId} + '/grades/' + ${studentId}}" method="post">
+            <label>Score:</label>
+            <input type="number" name="score" required /><br/>
+
+            <label>Feedback:</label>
+            <textarea name="feedback"></textarea><br/>
+
+            <button type="submit">Submit / Update Grade</button>
+        </form>
+
+        <hr/>
+    </div>
+
+    <p>
+        <a th:href="@{'/grades/course/' + ${courseId}}">← Back to Course</a>
+    </p>
+
+</body>
+</html>

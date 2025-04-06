@@ -1,49 +1,32 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Students in Course</title>
+    <title>Assignments in Course</title>
     <style>
-        form {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-        }
-        button {
-            display: block;
-            margin-bottom: 10px;
-        }
+        ul { margin-top: 10px; }
+        li { margin: 5px 0; }
     </style>
 </head>
 <body>
-<h2 th:text="'Students in ' + ${courseId}"></h2>
 
-<!-- <pre th:text="${studentGrades}"></pre> -->
-<div th:each="entry : ${studentGrades.entrySet()}">
-    <strong th:text="${entry.key}"></strong><br/>
+<h2 th:text="'Assignments in ' + ${courseId}">Assignments</h2>
 
-    <div th:if="${entry.value != null}">
-        <p>Current Score: <span th:text="${entry.value.score}">N/A</span></p>
-        <p>Feedback: <span th:text="${entry.value.feedback}">N/A</span></p>
-    </div>
-    <div th:unless="${entry.value != null}">
-        <p>No grade yet.</p>
-    </div>
-
-    <form th:action="@{/grades/submit}" method="post">
-        <input type="hidden" name="courseId" th:value="${courseId}" />
-        <input type="hidden" name="studentId" th:value="${entry.key}" />
-
-        <label>New Score:</label>
-        <input type="number" name="score" required /><br/>
-
-        <label>New Feedback:</label>
-        <textarea name="feedback"></textarea><br/>
-
-        <button type="submit">Submit / Update Grade</button>
-    </form>
+<div>
+    <a th:href="@{'/courses/' + ${courseId} + '/assignments/new'}">
+        <button>Create New Assignment</button>
+    </a>
 </div>
 
+<h3>Existing Assignments</h3>
+<ul>
+    <li th:each="assignment : ${assignments}">
+        <a th:href="@{'/grades/course/' + ${courseId} + '/assignment/' + ${assignment.id} + '/grade'}"
+           th:text="${assignment.title + ' - ' + assignment.deadline}">
+        </a>
+    </li>
+</ul>
 
-<a href="/grades/enter">← Back to Grade Entry</a>
+<p><a th:href="@{/grades/enter}">← Back to Grade Entry</a></p>
+
 </body>
 </html>

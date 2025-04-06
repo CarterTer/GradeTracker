@@ -101,7 +101,12 @@ public UserDetails loadUserByUsername(String username) throws UsernameNotFoundEx
         role = "ROLE_STUDENT";
     }
 
-    return new GTUser(username, u.password, record.getEmail(), List.of(new SimpleGrantedAuthority(role)));
+    return org.springframework.security.core.userdetails.User
+        .withUsername(username)
+        .password(u.password)
+        .authorities(new SimpleGrantedAuthority(role))
+        .build();
+
 }
 
 

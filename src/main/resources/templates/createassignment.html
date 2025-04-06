@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head><title>Create Assignment</title></head>
+<body>
+<h2>Create Assignment for Course: <span th:text="${courseId}"></span></h2>
+
+<form th:action="@{'/courses/' + ${courseId} + '/assignments'}" method="post">
+    <label>Assignment Title:</label><br/>
+    <input type="text" name="title" required/><br/>
+
+    <label>Description:</label><br/>
+    <textarea name="content" required></textarea><br/>
+
+    <label>Deadline (e.g. 2025-04-12):</label><br/>
+    <input type="text" name="deadline"/><br/>
+
+    <label>Instructor Name:</label><br/>
+    <input type="text" name="createdBy" required/><br/>
+
+    <button type="submit">Submit Assignment</button>
+</form>
+
+<p th:text="${message}"></p>
+</body>
+</html>
