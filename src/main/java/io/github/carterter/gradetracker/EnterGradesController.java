@@ -77,9 +77,9 @@ public class EnterGradesController {
             students = new ArrayList<>();
         }
     
-        // 这里开始构建学生成绩 Map<String, Grade>
         Map<String, Grade> studentGrades = new HashMap<>();
         for (String studentId : students) {
+            Grade grade = null;
             var gradeDoc = db.collection("courses")
                              .document(courseId)
                              .collection("students")
@@ -88,12 +88,14 @@ public class EnterGradesController {
                              .document("latest")
                              .get()
                              .get();
-    
+        
             if (gradeDoc.exists()) {
-                Grade grade = gradeDoc.toObject(Grade.class);
-                studentGrades.put(studentId, grade);
+                grade = gradeDoc.toObject(Grade.class);
             }
+        
+            studentGrades.put(studentId, grade);
         }
+        
     
         model.addAttribute("courseId", courseId);
         model.addAttribute("students", students);

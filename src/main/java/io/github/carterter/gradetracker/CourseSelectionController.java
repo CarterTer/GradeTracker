@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/courses")
@@ -25,9 +27,22 @@ public class CourseSelectionController {
     @PostMapping("/join")
     public String joinCourse(@RequestParam String courseId, Authentication auth) {
         Firestore db = FirestoreClient.getFirestore();
+        String studentId = auth.getName();
+    
         db.collection("courses")
           .document(courseId)
-          .update("students", FieldValue.arrayUnion(auth.getName()));
+          .update("students", FieldValue.arrayUnion(studentId));
+    
+          Map<String, Object> placeholder = new HashMap<>();
+          placeholder.put("joined", true);
+          db.collection("courses")
+            .document(courseId)
+            .collection("students")
+            .document(studentId)
+            .set(placeholder);
+          
+    
         return "redirect:/home";
     }
+    
 }
