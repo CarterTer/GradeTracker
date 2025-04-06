@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Student Grades</title>
+</head>
+<body>
+    <h2>Grades for [[${studentId}]] in Course [[${courseId}]]</h2>
+
+    <table>
+        <tr><th>Assignment</th><th>Score</th><th>Feedback</th></tr>
+        <tr th:each="g : ${grades}">
+            <td th:text="${g.assignment}">Assignment</td>
+            <td th:text="${g.score}">0</td>
+            <td th:text="${g.feedback}">None</td>
+        </tr>
+    </table>
+
+    <p>Average: <span th:text="${average}">0</span></p>
+    <p>Median: <span th:text="${median}">0</span></p>
+    <p>Max: <span th:text="${max}">0</span></p>
+    <p>Min: <span th:text="${min}">0</span></p>
+</body>
+</html>

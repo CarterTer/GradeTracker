@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head><title>All Assignments</title></head>
+<body>
+
+<h2 th:text="'Assignments for course: ' + ${courseId}"></h2>
+
+<ul>
+  <li th:each="a : ${assignments}">
+    <span th:text="${a.title}">Title</span> - 
+    <span th:text="${a.deadline}">Deadline</span>
+  </li>
+</ul>
+
+<p><a th:href="@{'/grades/course/' + ${courseId}}">← Back to Course</a></p>
+
+</body>
+</html>
