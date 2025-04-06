@@ -16,13 +16,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/student")
 public class StudentGradesController {
 
-    // 方法一：点击按钮自动重定向
     @GetMapping("/viewmygrades")
     public RedirectView redirectToGrades(Authentication auth) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
         String username = auth.getName();
 
-        // 查询用户文档，获取 UID
         QuerySnapshot snapshot = db.collection("users")
                 .whereEqualTo("username", username)
                 .get().get();
@@ -33,8 +31,7 @@ public class StudentGradesController {
 
         DocumentSnapshot userDoc = snapshot.getDocuments().get(0);
         String studentId = userDoc.getId(); // UID
-
-        // 遍历所有课程，找到包含该 UID 的课程
+        
         var courses = db.collection("courses").get().get().getDocuments();
         for (var course : courses) {
             List<String> students = (List<String>) course.get("students");
@@ -46,7 +43,6 @@ public class StudentGradesController {
         throw new RuntimeException("No course found for student: " + studentId);
     }
 
-    // 方法二：展示成绩统计（计算所有学生的成绩）
     @GetMapping("/{studentId}/course/{courseId}/grades")
     public String viewGradesStats(@PathVariable String studentId,
                                    @PathVariable String courseId,
@@ -66,7 +62,6 @@ public class StudentGradesController {
             String assignmentId = assignmentDoc.getId();
             String title = (String) assignmentDoc.get("title");
 
-            // 当前学生的分数
             var currentGrade = db.collection("courses")
                     .document(courseId)
                     .collection("assignments")
@@ -83,7 +78,6 @@ public class StudentGradesController {
                 personalTotal += studentScore;
             }
 
-            // 所有学生分数
             var allStudentGrades = db.collection("courses")
                     .document(courseId)
                     .collection("assignments")
@@ -99,7 +93,6 @@ public class StudentGradesController {
                 }
             }
 
-            // 计算统计数据
             double avg = scores.stream().mapToDouble(Double::doubleValue).average().orElse(0);
             double max = scores.stream().mapToDouble(Double::doubleValue).max().orElse(0);
             double min = scores.stream().mapToDouble(Double::doubleValue).min().orElse(0);

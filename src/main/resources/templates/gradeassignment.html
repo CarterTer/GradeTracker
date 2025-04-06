@@ -15,18 +15,15 @@
     <div th:each="studentId : ${students}">
         <h3 th:text="${studentId}"></h3>
 
-        <!-- 如果已存在成绩 -->
         <div th:if="${grades != null and grades[studentId] != null}">
             <p>Score: <span th:text="${grades[studentId]['score']}"></span></p>
             <p>Feedback: <span th:text="${grades[studentId]['feedback']}"></span></p>
         </div>
 
-        <!-- 没有成绩时 -->
         <div th:if="${grades == null or grades[studentId] == null}">
             <p>No grade yet.</p>
         </div>
 
-        <!-- 表单提交 -->
         <form th:action="@{'/courses/' + ${courseId} + '/assignments/' + ${assignmentId} + '/grades/' + ${studentId}}" method="post">
             <label>Score:</label>
             <input type="number" name="score" required /><br/>
