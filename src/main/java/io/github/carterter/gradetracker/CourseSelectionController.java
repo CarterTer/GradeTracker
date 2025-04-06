@@ -25,24 +25,38 @@ public class CourseSelectionController {
     }
 
     @PostMapping("/join")
-    public String joinCourse(@RequestParam String courseId, Authentication auth) {
+    public String joinCourse(@RequestParam String courseId, Authentication auth, Model model) throws Exception {
         Firestore db = FirestoreClient.getFirestore();
-        String studentId = auth.getName();
+        String username = auth.getName();
     
+        // 通过用户名获取 UID（Firebase 用户 ID）
+        QuerySnapshot snapshot = db.collection("users")
+                .whereEqualTo("username", username)
+                .get().get();
+    
+        if (snapshot.isEmpty()) {
+            model.addAttribute("error", "User not found in Firestore");
+            return "joincourse";
+        }
+    
+        String uid = snapshot.getDocuments().get(0).getId();
+    
+        // 写入到 courses/{courseId}/students 字段（数组）中
         db.collection("courses")
-          .document(courseId)
-          .update("students", FieldValue.arrayUnion(studentId));
+                .document(courseId)
+                .update("students", FieldValue.arrayUnion(uid));
     
-          Map<String, Object> placeholder = new HashMap<>();
-          placeholder.put("joined", true);
-          db.collection("courses")
-            .document(courseId)
-            .collection("students")
-            .document(studentId)
-            .set(placeholder);
-          
+        // 写入一个占位文档（用于后续查找）
+        Map<String, Object> placeholder = new HashMap<>();
+        placeholder.put("joined", true);
+        db.collection("courses")
+                .document(courseId)
+                .collection("students")
+                .document(uid)
+                .set(placeholder);
     
         return "redirect:/home";
     }
+    
     
 }

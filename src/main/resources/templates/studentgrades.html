@@ -1,23 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Student Grades</title>
+    <title>My Grades</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
-    <h2>Grades for [[${studentId}]] in Course [[${courseId}]]</h2>
+    <h2>Your Assignment Grades</h2>
 
-    <table>
-        <tr><th>Assignment</th><th>Score</th><th>Feedback</th></tr>
-        <tr th:each="g : ${grades}">
-            <td th:text="${g.assignment}">Assignment</td>
-            <td th:text="${g.score}">0</td>
-            <td th:text="${g.feedback}">None</td>
-        </tr>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Assignment</th>
+                <th>Your Score</th>
+                <th>Feedback</th>
+                <th>Average</th>
+                <th>Max</th>
+                <th>Min</th>
+                <th>Median</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="grade : ${grades}">
+                <td th:text="${grade.title}">Assignment Name</td>
+                <td th:text="${grade.score}">Score</td>
+                <td th:text="${grade.feedback}">Feedback</td>
+                <td th:text="${grade.average}">Average</td>
+                <td th:text="${grade.max}">Max</td>
+                <td th:text="${grade.min}">Min</td>
+                <td th:text="${grade.median}">Median</td>
+            </tr>
+        </tbody>
     </table>
 
-    <p>Average: <span th:text="${average}">0</span></p>
-    <p>Median: <span th:text="${median}">0</span></p>
-    <p>Max: <span th:text="${max}">0</span></p>
-    <p>Min: <span th:text="${min}">0</span></p>
+    <p><strong>Total Score:</strong> <span th:text="${total}">0</span></p>
+
+    <a th:href="@{/home}"><button>Back to Home</button></a>
 </body>
 </html>

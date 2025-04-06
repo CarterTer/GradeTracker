@@ -12,33 +12,37 @@
         Grading Assignment for [[${courseId}]]
     </h2>
     
-<div th:each="studentId : ${students}">
-    <h3 th:text="${studentId}"></h3>
+    <div th:each="studentId : ${students}">
+        <h3 th:text="${studentId}"></h3>
 
-    <div th:if="${grades != null and grades.containsKey(studentId)}">
-        <p>Score: <span th:text="${grades[studentId]['score']}"></span></p>
-        <p>Feedback: <span th:text="${grades[studentId]['feedback']}"></span></p>
+        <!-- 如果已存在成绩 -->
+        <div th:if="${grades != null and grades[studentId] != null}">
+            <p>Score: <span th:text="${grades[studentId]['score']}"></span></p>
+            <p>Feedback: <span th:text="${grades[studentId]['feedback']}"></span></p>
+        </div>
+
+        <!-- 没有成绩时 -->
+        <div th:if="${grades == null or grades[studentId] == null}">
+            <p>No grade yet.</p>
+        </div>
+
+        <!-- 表单提交 -->
+        <form th:action="@{'/courses/' + ${courseId} + '/assignments/' + ${assignmentId} + '/grades/' + ${studentId}}" method="post">
+            <label>Score:</label>
+            <input type="number" name="score" required /><br/>
+
+            <label>Feedback:</label>
+            <textarea name="feedback"></textarea><br/>
+
+            <button type="submit">Submit / Update Grade</button>
+        </form>
+
+        <hr/>
     </div>
-    <div th:unless="${grades != null and grades.containsKey(studentId)}">
-        <p>No grade yet.</p>
-    </div>
 
-    <form th:action="@{'/courses/' + ${courseId} + '/assignments/' + ${assignmentId} + '/grades/' + ${studentId}}" method="post">
-        <label>Score:</label>
-        <input type="number" name="score" required /><br/>
-
-        <label>Feedback:</label>
-        <textarea name="feedback"></textarea><br/>
-
-        <button type="submit">Submit / Update Grade</button>
-    </form>
-
-    <hr/>
-</div>
-
-<p>
-    <a th:href="@{'/grades/course/' + ${courseId}}">← Back to Course</a>
-</p>
+    <p>
+        <a th:href="@{'/grades/course/' + ${courseId}}">← Back to Course</a>
+    </p>
 
 </body>
 </html>
