@@ -16,13 +16,11 @@
 <h2 th:text="'Assignments in ' + ${courseId}">Assignments</h2>
 
 <h3>Existing Assignments</h3>
-<ul>
-    <li th:each="assignment : ${assignments}">
-        <a th:href="@{'/grades/course/' + ${courseId} + '/assignment/' + ${assignment.id} + '/grade'}"
-           th:text="${assignment.title + ' - ' + assignment.deadline}">
-        </a>
-    </li>
-</ul>
+<div th:each="assignment : ${assignments}">
+    <a th:href="@{'/grades/course/' + ${courseId} + '/assignment/' + ${assignment.id} + '/grade'}">
+        <button class="button" th:text="${assignment.title + ' (' + assignment.deadline} + ')'"></button>
+    </a>
+</div>
 
 <div>
     <a th:href="@{'/courses/' + ${courseId} + '/assignments/new'}">
