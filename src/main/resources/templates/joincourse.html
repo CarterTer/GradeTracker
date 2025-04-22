@@ -3,16 +3,18 @@
 <head>
     <title>Join Course</title>
     <link th:href="@{/css/main.css}" rel="stylesheet" />
+    <link th:href="@{/css/center.css}" rel="stylesheet" />
 </head>
-<body>
+<body class="parent">
 <div class="view" th:if="${#authorization.expression('hasAuthority(''ROLE_STUDENT'')')}">
+    <a class="go-backward" href="/home">←back</a>
     <h2>Available Courses</h2>
     <ul>
         <li th:each="course : ${courses}">
             <form th:action="@{/courses/join}" method="post">
-                <span th:text="${course.id} + ' - ' + ${course.data.title}"></span>
+                <span th:text="${course.id} + ': ' + ${course.data.title}"></span>
                 <input type="hidden" name="courseId" th:value="${course.id}" />
-                <button type="submit">Join</button>
+                <button class="button" type="submit">Join</button>
             </form>
         </li>
     </ul>

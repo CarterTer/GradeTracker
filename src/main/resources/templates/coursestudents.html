@@ -6,16 +6,14 @@
         ul { margin-top: 10px; }
         li { margin: 5px 0; }
     </style>
+    <link th:href="@{/css/main.css}" rel="stylesheet" />
+    <link th:href="@{/css/center.css}" rel="stylesheet" />
 </head>
-<body>
+<body class="parent">
+<div class="view">
+<a class="go-backward" th:href="@{/grades/enter}">←back</a>
 
 <h2 th:text="'Assignments in ' + ${courseId}">Assignments</h2>
-
-<div>
-    <a th:href="@{'/courses/' + ${courseId} + '/assignments/new'}">
-        <button>Create New Assignment</button>
-    </a>
-</div>
 
 <h3>Existing Assignments</h3>
 <ul>
@@ -26,7 +24,12 @@
     </li>
 </ul>
 
-<p><a th:href="@{/grades/enter}">← Back to Grade Entry</a></p>
+<div>
+    <a th:href="@{'/courses/' + ${courseId} + '/assignments/new'}">
+        <button class="button">Create New Assignment</button>
+    </a>
+</div>
 
+</div>
 </body>
 </html>

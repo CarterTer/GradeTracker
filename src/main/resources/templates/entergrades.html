@@ -8,6 +8,7 @@
     <body>
         <div class="parent" th:if="${#authorization.expression('hasAuthority(''ROLE_TEACHER'')')}">
             <form th:action="@{/grades/enter}" method="post" class="view">
+                <a class="go-backward" href="/home">←back</a>
                 <h2>Enter Grades</h2>
 
                 <div>
