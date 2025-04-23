@@ -29,7 +29,6 @@ public class CourseSelectionController {
         Firestore db = FirestoreClient.getFirestore();
         String username = auth.getName();
     
-        // 通过用户名获取 UID（Firebase 用户 ID）
         QuerySnapshot snapshot = db.collection("users")
                 .whereEqualTo("username", username)
                 .get().get();
@@ -40,23 +39,22 @@ public class CourseSelectionController {
         }
     
         String uid = snapshot.getDocuments().get(0).getId();
-    
-        // 写入到 courses/{courseId}/students 字段（数组）中
+
         db.collection("courses")
-                .document(courseId)
-                .update("students", FieldValue.arrayUnion(uid));
+          .document(courseId)
+          .update("students", FieldValue.arrayUnion(uid));
     
-        // 写入一个占位文档（用于后续查找）
-        Map<String, Object> placeholder = new HashMap<>();
-        placeholder.put("joined", true);
+        Map<String, Object> studentInfo = new HashMap<>();
+        studentInfo.put("joined", true);
+        studentInfo.put("username", username);
+    
         db.collection("courses")
-                .document(courseId)
-                .collection("students")
-                .document(uid)
-                .set(placeholder);
+          .document(courseId)
+          .collection("students")
+          .document(uid)
+          .set(studentInfo);
     
         return "redirect:/home";
     }
-    
     
 }

@@ -65,6 +65,6 @@ public class AssignmentController {
 
         model.addAttribute("assignments", assignments);
         model.addAttribute("courseId", courseId);
-        return "assignment";
+        return "assignments";
     }
 }

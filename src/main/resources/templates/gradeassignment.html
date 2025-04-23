@@ -1,46 +1,57 @@
-<!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Grade Assignment</title>
-    <link rel="stylesheet" th:href="@{/css/main.css}">
-    <link rel="stylesheet" th:href="@{/css/center.css}">
+  <meta charset="UTF-8"/>
+  <title>Grade Assignment</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+  <link rel="stylesheet" th:href="@{/css/center.css}"/>
 </head>
 <body class="parent">
-<div class="view">
+  <div class="view">
 
-    <a class="go-backward" th:href="@{'/grades/course/' + ${courseId}}">←back</a>
-    <h2 th:if="${assignment != null}">
-        Grading Assignment for [[${courseId}]]: [[${assignment.title}]]
-    </h2>
-    <h2 th:unless="${assignment != null}">
-        Grading Assignment for [[${courseId}]]
-    </h2>
-    
-    <div th:each="studentId : ${students}">
-        <h3 th:text="${studentId}"></h3>
+    <a class="go-backward"
+    th:href="@{'/grades/course/' + ${courseId}}"> 
+    ← Back to Assignments
+    </a>
+ 
 
-        <div th:if="${grades != null and grades[studentId] != null}">
-            <p>Score: <span th:text="${grades[studentId]['score']}"></span></p>
-            <p>Feedback: <span th:text="${grades[studentId]['feedback']}"></span></p>
+    <h2>
+      Grading Assignment for [[${courseId}]]:
+      <span th:text="${assignment?.title}">[Assignment Title]</span>
+    </h2>
+
+    <div th:if="${studentGrades != null and !studentGrades.isEmpty()}">
+      <div th:each="entry : ${studentGrades.entrySet()}">
+        <h3 th:text="${entry.value['username'] != null ? entry.value['username'] : entry.key}">Student ID</h3>
+
+
+        <div th:if="${entry.value != null}">
+          <p>Current Score: <span th:text="${entry.value['score']}">N/A</span></p>
+          <p>Feedback: <span th:text="${entry.value['feedback']}">N/A</span></p>
+        </div>
+        <div th:unless="${entry.value != null}">
+          <p>No grade yet.</p>
         </div>
 
-        <div th:if="${grades == null or grades[studentId] == null}">
-            <p>No grade yet.</p>
-        </div>
+        <form th:action="@{'/courses/' + ${courseId} + '/assignments/' + ${assignmentId} + '/grades/' + ${entry.key}}"
+              method="post">
+          <label>Score:</label>
+          <input type="number" name="score" required /><br/>
 
-        <form th:action="@{'/courses/' + ${courseId} + '/assignments/' + ${assignmentId} + '/grades/' + ${studentId}}" method="post">
-            <label>Score:</label>
-            <input type="number" name="score" required /><br/>
+          <label>Feedback:</label>
+          <textarea name="feedback"></textarea><br/>
 
-            <label>Feedback:</label>
-            <textarea name="feedback"></textarea><br/>
-
-            <button class="button" type="submit">Submit / Update Grade</button>
+          <button type="submit">Submit / Update Grade</button>
         </form>
-
         <hr/>
+      </div>
     </div>
 
-</div>
+    <div th:if="${studentGrades == null or studentGrades.isEmpty()}">
+      <p>No students in this course.</p>
+    </div>
+
+  </div>
 </body>
 </html>
