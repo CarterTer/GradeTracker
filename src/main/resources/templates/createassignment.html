@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-<head><title>Create Assignment</title></head>
-<body>
-<h2>Create Assignment for Course: <span th:text="${courseId}"></span></h2>
+<head><title>Create Assignment</title>
+    <link th:href="@{/css/main.css}" rel="stylesheet" />
+    <link th:href="@{/css/center.css}" rel="stylesheet" />
+</head>
+<body class="parent">
 
-<form th:action="@{'/courses/' + ${courseId} + '/assignments'}" method="post">
-    <label>Assignment Title:</label><br/>
-    <input type="text" name="title" required/><br/>
+<form class="view" th:action="@{'/courses/' + ${courseId} + '/assignments'}" method="post">
+    <a class="go-backward" th:href="@{'/grades/course/' + ${courseId}}">←back</a>
+    <h2>Create Assignment for Course: <span th:text="${courseId}"></span></h2>
+    <label>Assignment Title:</label>
+    <input type="text" name="title" required/>
 
-    <label>Description:</label><br/>
-    <textarea name="content" required></textarea><br/>
+    <label>Description:</label>
+    <textarea name="content" required></textarea>
 
-    <label>Deadline (e.g. 2025-04-12):</label><br/>
-    <input type="text" name="deadline"/><br/>
+    <label>Deadline (e.g. 2025-04-12):</label>
+    <input type="text" name="deadline"/>
 
-    <label>Instructor Name:</label><br/>
-    <input type="text" name="createdBy" required/><br/>
+    <label>Instructor Name:</label>
+    <input type="text" name="createdBy" required/>
 
-    <button type="submit">Submit Assignment</button>
+    <button class="button" type="submit">Submit Assignment</button>
 </form>
 
 <p th:text="${message}"></p>
+</div>
 </body>
 </html>

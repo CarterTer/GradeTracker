@@ -34,3 +34,17 @@ html, body {
     height: 100%;
     width: 100%;
 }
+
+li + li {
+    margin-top: 15px;
+}
+
+.spaced {
+    display: grid;
+    justify-items: center;
+    gap: 15px;
+}
+
+textarea {
+    resize: vertical;
+}

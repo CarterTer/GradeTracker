@@ -3,13 +3,15 @@
 <head>
     <title>Create Course</title>
     <link th:href="@{/css/main.css}" rel="stylesheet" />
+    <link th:href="@{/css/center.css}" rel="stylesheet" />
 </head>
-<body>
+<body class="parent">
+    
+<div class="view" th:if="${#authorization.expression('hasAuthority(''ROLE_TEACHER'')')}">
+    <a class="go-backward" href="/home">←back</a>
     <div th:if="${error}">
         <p style="color: red" th:text="${error}"></p>
     </div>
-    
-<div class="view" th:if="${#authorization.expression('hasAuthority(''ROLE_TEACHER'')')}">
     <h2>Create a New Course</h2>
     <form th:action="@{/courses/create}" method="post">
         <label>Course ID:</label><br/>
@@ -18,7 +20,7 @@
         <label>Course Title:</label><br/>
         <input type="text" name="title" required/><br/><br/>
 
-        <button type="submit">Create Course</button>
+        <button class="button" type="submit">Create Course</button>
     </form>
 </div>
 <div th:unless="${#authorization.expression('hasAuthority(''ROLE_TEACHER'')')}">

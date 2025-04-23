@@ -3,37 +3,39 @@
 <head>
     <title>My Grades</title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/center.css}">
 </head>
-<body>
+<body class="parent">
+<div class="view">
+    <a class="go-backward" href="/home">←back</a>
     <h2>Your Assignment Grades</h2>
 
     <table border="1">
         <thead>
-            <tr>
-                <th>Assignment</th>
-                <th>Your Score</th>
-                <th>Feedback</th>
-                <th>Average</th>
-                <th>Max</th>
-                <th>Min</th>
-                <th>Median</th>
-            </tr>
+        <tr>
+            <th>Assignment</th>
+            <th>Your Score</th>
+            <th>Feedback</th>
+            <th>Average</th>
+            <th>Max</th>
+            <th>Min</th>
+            <th>Median</th>
+        </tr>
         </thead>
         <tbody>
-            <tr th:each="grade : ${grades}">
-                <td th:text="${grade.title}">Assignment Name</td>
-                <td th:text="${grade.score}">Score</td>
-                <td th:text="${grade.feedback}">Feedback</td>
-                <td th:text="${grade.average}">Average</td>
-                <td th:text="${grade.max}">Max</td>
-                <td th:text="${grade.min}">Min</td>
-                <td th:text="${grade.median}">Median</td>
-            </tr>
+        <tr th:each="grade : ${grades}">
+            <td th:text="${grade.title}">Assignment Name</td>
+            <td th:text="${grade.score}">Score</td>
+            <td th:text="${grade.feedback}">Feedback</td>
+            <td th:text="${grade.average}">Average</td>
+            <td th:text="${grade.max}">Max</td>
+            <td th:text="${grade.min}">Min</td>
+            <td th:text="${grade.median}">Median</td>
+        </tr>
         </tbody>
     </table>
 
     <p><strong>Total Score:</strong> <span th:text="${total}">0</span></p>
-
-    <a th:href="@{/home}"><button>Back to Home</button></a>
+</div>
 </body>
 </html>

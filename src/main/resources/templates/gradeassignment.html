@@ -2,9 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <title>Grade Assignment</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/center.css}">
 </head>
-<body>
+<body class="parent">
+<div class="view">
 
+    <a class="go-backward" th:href="@{'/grades/course/' + ${courseId}}">←back</a>
     <h2 th:if="${assignment != null}">
         Grading Assignment for [[${courseId}]]: [[${assignment.title}]]
     </h2>
@@ -31,15 +35,12 @@
             <label>Feedback:</label>
             <textarea name="feedback"></textarea><br/>
 
-            <button type="submit">Submit / Update Grade</button>
+            <button class="button" type="submit">Submit / Update Grade</button>
         </form>
 
         <hr/>
     </div>
 
-    <p>
-        <a th:href="@{'/grades/course/' + ${courseId}}">← Back to Course</a>
-    </p>
-
+</div>
 </body>
 </html>

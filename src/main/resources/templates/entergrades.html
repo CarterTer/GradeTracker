@@ -3,47 +3,17 @@
     <head>
         <title>Enter Grades</title>
         <link th:href="@{/css/main.css}" rel="stylesheet" />
-        <link th:href="@{/css/entergrades.css}" rel="stylesheet" />
+        <link th:href="@{/css/center.css}" rel="stylesheet" />
     </head>
     <body>
         <div class="parent" th:if="${#authorization.expression('hasAuthority(''ROLE_TEACHER'')')}">
-            <form th:action="@{/grades/enter}" method="post" class="view">
-                <h2>Enter Grades</h2>
-
-                <div>
-                    <label for="courseId">Course ID:</label><br/>
-                    <input type="text" id="courseId" name="courseId" th:value="${selectedCourseId}" required/>
-                </div>
-
-                <div>
-                    <label for="studentId">Student ID:</label><br/>
-                    <input type="text" id="studentId" name="studentId" th:value="${selectedStudentId}" required/>
-                </div>
-
-                <div>
-                    <label for="score">Score:</label><br/>
-                    <input type="number" id="score" name="score" required/>
-                </div>
-
-                <div>
-                    <label for="feedback">Feedback:</label><br/>
-                    <textarea id="feedback" name="feedback"></textarea>
-                </div>
-
-                <input class="button" type="submit" value="Submit Grade">
-            </form>
-
             <div class="view">
+                <a class="go-backward" href="/home">←back</a>
                 <h2>Existing Courses</h2>
-                <ul>
-                    <li th:each="course : ${courses}">
-                      <a th:href="@{'/grades/course/' + ${course}}" th:text="${course}"></a>
-                    </li>
-                  </ul>
-                  
+                <div th:each="course : ${courses}">
+                <a th:href="@{'/grades/course/' + ${course}}"><button class="button" th:text="${course}"></button></a>
+                </div>
             </div>
-
-
         </div>
 
         <div th:unless="${#authorization.expression('hasAuthority(''ROLE_TEACHER'')')}">
