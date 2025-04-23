@@ -1,6 +1,7 @@
 package io.github.carterter.gradetracker.controller;
 
-import com.google.cloud.firestore.*;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
 import com.google.firebase.cloud.FirestoreClient;
 import io.github.carterter.gradetracker.data.Assignment;
 import org.springframework.stereotype.Controller;
@@ -19,46 +20,57 @@ public class AssignmentGradeController {
                                        Model model) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
 
-        DocumentSnapshot doc = db.collection("courses")
+        DocumentSnapshot assignmentDoc = db.collection("courses")
                 .document(courseId)
                 .collection("assignments")
                 .document(assignmentId)
-                .get()
-                .get();
+                .get().get();
 
-        Assignment assignment = doc.toObject(Assignment.class);
-        if (assignment != null) {
-            assignment.setId(doc.getId());
-        }
+        Assignment assignment = assignmentDoc.toObject(Assignment.class);
+        if (assignment != null) assignment.setId(assignmentDoc.getId());
 
-        DocumentSnapshot courseDoc = db.collection("courses").document(courseId).get().get();
+        DocumentSnapshot courseDoc = db.collection("courses")
+                .document(courseId)
+                .get().get();
+
+        @SuppressWarnings("unchecked")
         List<String> students = (List<String>) courseDoc.get("students");
-        if (students == null) {
-            students = new ArrayList<>();
-        }
+        if (students == null) students = new ArrayList<>();
 
-        Map<String, Map<String, Object>> grades = new HashMap<>();
-        for (String studentId : students) {
-            DocumentSnapshot gdoc = db.collection("courses")
+        Map<String, Map<String, Object>> studentGrades = new LinkedHashMap<>();
+        for (String sid : students) {
+            Map<String, Object> combined = new HashMap<>();
+        
+            DocumentSnapshot gradeDoc = db.collection("courses")
                     .document(courseId)
                     .collection("assignments")
                     .document(assignmentId)
                     .collection("grades")
-                    .document(studentId)
-                    .get()
-                    .get();
-            if (gdoc.exists()) {
-                grades.put(studentId, gdoc.getData());
-            } else {
-                grades.put(studentId, null); 
+                    .document(sid)
+                    .get().get();
+            if (gradeDoc.exists() && gradeDoc.getData() != null) {
+                combined.putAll(gradeDoc.getData());
             }
+        
+            DocumentSnapshot studentDoc = db.collection("courses")
+                    .document(courseId)
+                    .collection("students")
+                    .document(sid)
+                    .get().get();
+            if (studentDoc.exists() && studentDoc.contains("username")) {
+                combined.put("username", studentDoc.getString("username"));
+            }
+        
+            studentGrades.put(sid, combined);
         }
+        
 
+        model.addAttribute("studentGrades", studentGrades);
         model.addAttribute("assignment", assignment);
         model.addAttribute("courseId", courseId);
         model.addAttribute("assignmentId", assignmentId);
         model.addAttribute("students", students);
-        model.addAttribute("grades", grades);
+        //model.addAttribute("grades", grades);
 
         return "gradeassignment";
     }
@@ -67,8 +79,8 @@ public class AssignmentGradeController {
     public String submitGrade(@PathVariable String courseId,
                               @PathVariable String assignmentId,
                               @PathVariable String studentId,
-                              @RequestParam String score,
-                              @RequestParam String feedback) {
+                              @RequestParam int score,
+                              @RequestParam String feedback) throws ExecutionException, InterruptedException {
 
         Firestore db = FirestoreClient.getFirestore();
 
@@ -83,7 +95,8 @@ public class AssignmentGradeController {
                 .document(assignmentId)
                 .collection("grades")
                 .document(studentId)
-                .set(grade);
+                .set(grade)
+                .get();
 
         return "redirect:/courses/" + courseId + "/assignments/" + assignmentId + "/grades";
     }

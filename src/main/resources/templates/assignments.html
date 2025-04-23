@@ -1,18 +1,26 @@
-<!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-<head><title>All Assignments</title></head>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>All Assignments</title>
+</head>
 <body>
 
-<h2 th:text="'Assignments for course: ' + ${courseId}"></h2>
+  <h2 th:text="'Assignments for course: ' + ${courseId}"></h2>
 
-<ul>
-  <li th:each="a : ${assignments}">
-    <span th:text="${a.title}">Title</span> - 
-    <span th:text="${a.deadline}">Deadline</span>
-  </li>
-</ul>
+  <ul>
+    <li th:each="a : ${assignments}">
+      <a th:href="@{'/courses/' + ${courseId} + '/assignments/' + ${a.id} + '/grades'}"
+         th:text="${a.title} + ' (' + a.deadline + ')'">
+        Assignment
+      </a>
+    </li>
+  </ul>
 
-<p><a th:href="@{'/grades/course/' + ${courseId}}">← Back to Course</a></p>
+  <p>
+    <a th:href="@{'/courses/' + ${courseId}}">← Back to Course</a>
+  </p>
 
 </body>
 </html>
